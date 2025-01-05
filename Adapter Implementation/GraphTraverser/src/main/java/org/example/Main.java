@@ -6,7 +6,6 @@ import org.example.graphTravelers.BfsGraphTraverser;
 import org.example.graphTravelers.DfsGraphTraverser;
 import org.example.graphTravelers.Traverser;
 
-import java.util.ArrayList;
 import java.util.List;
 
 // Press Shift twice to open the Search Everywhere dialog and type `show whitespaces`,

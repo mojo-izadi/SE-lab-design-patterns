@@ -2,6 +2,74 @@
 
 
 
+# گام اول - پیاده‌سازی الگوی Adapter
+
+## انتخاب نوع Adapter
+در اینجا چون می‌خواهم واسط
+graph
+بسازم نه کلاس گراف، امکان استفاده از هر دو مدل 
+object scope و class scope
+را در جاوا دارم. (جاوا اجازه ارث‌بری از دو کلاس را نمی‌دهد.)
+
+با این حال دلیل اینکه همچنان از 
+object scope
+استفاده می‌کنم، اصل
+composition over inheritance
+است. ارث‌بری از دو موجودیت خوانایی را کم می‌کند و وابستگی بیشتری نسبت به 
+object scope
+ایجاد می‌کند.
+از این رو استفاده از 
+object scope
+منطقی‌تر است.
+
+به علاوه، تضمینی وجود ندارد که کلاس کتابخانه مورد نظر اجازه 
+override
+بدهد و ممکن است بعدا کتابخانه‌ای که می‌خواهیم آن را اضافه کنیم این امکان را نداشته و به مشکل بخوریم و مجبور شویم اصل
+OCP
+را نقض کرده تا مشکل را حل کنیم.
+
+## نحوه پیاده‌سازی الگو
+ابتدا یک واسط گراف ساختم:
+
+```java
+public interface Graph {
+    void addVertex(int v);
+    void addEdge(String name, int sourceVertex, int destinationVertex);
+    Collection<Integer> getNeighbors(int v);
+}
+```
+
+سپس پیاده‌سازی از کتابخانه را در آداپتر زیر قرار دادم:
+
+```java
+public class JungGraphAdapter implements Graph {
+    SparseMultigraph<Integer, String> graph = new SparseMultigraph<>();
+
+    @Override
+    public void addVertex(int v) {
+        graph.addVertex(v);
+    }
+
+    @Override
+    public void addEdge(String name, int sourceVertex, int destinationVertex) {
+        graph.addEdge(name, sourceVertex, destinationVertex);
+    }
+
+    @Override
+    public Collection<Integer> getNeighbors(int v) {
+        return graph.getNeighbors(v);
+    }
+}
+```
+
+سپس در کل کد، هر جا مستقیم از
+SparseMultigraph
+استفاده شده بود، از 
+Graph
+که واسط خودم است، استفاده کردم.
+
+همچنین نتیجه ریفکتور را با قبل آن مقایسه کردم و خروجی‌ها یکسان بود.
+
 # گام سوم
 
 در کل الگوی strategy جایی به کار می‌رود که الگوریتمی داشته باشیم که بخواهیم در زمان رانتایم به صورت دینامیک بتوانیم تغییر دهیم یا انتخاب کنیم.

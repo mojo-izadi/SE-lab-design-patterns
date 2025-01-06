@@ -1,7 +1,7 @@
 package org.example;
 
 import org.example.graph.Graph;
-import org.example.graph.JungGraphAdapter;
+import org.example.graph.JGraphTAdapter;
 import org.example.graphTravelers.BfsGraphTraverser;
 import org.example.graphTravelers.DfsGraphTraverser;
 import org.example.graphTravelers.Traverser;
@@ -13,7 +13,7 @@ import java.util.List;
 public class Main {
     public static void main(String[] args) {
         // Create a graph
-        Graph graph = new JungGraphAdapter();
+        Graph graph = new JGraphTAdapter();
 
         // Add vertices (using Integer nodes)
         graph.addVertex(1);

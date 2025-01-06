@@ -70,6 +70,52 @@ Graph
 
 همچنین نتیجه ریفکتور را با قبل آن مقایسه کردم و خروجی‌ها یکسان بود.
 
+# گام دوم - تغییر کتابخانه
+## تغییر کتاب خانه 
+برای تغییر کتاب خانه فقط در فایل main پروژه، import مربوط به adapter  کتاب خانه jGpathT را جایگزین import مربوط به adapter کتاب خانه jung کردم. همچنین کد زیر را برای ساخت graph به main اضافه کردم :
+
+```java
+Graph graph = new JGraphTAdapter();
+```
+## پیاده سازی adapter جدید
+در adapter از کتابخانه مربوط به jGraphT، کلاس SimpleGraph را import کردم و توابع موجود در interface مربوط به graph را طبق توابع موجود در کلاس SimpleGraph پیاده سازی کردم که کد آن در زیر موجود است.
+```java
+package org.example.graph;
+
+import org.jgrapht.graph.SimpleGraph;
+
+import java.util.Collection;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+public class JGraphTAdapter implements Graph {
+    SimpleGraph<Integer, String> graph = new SimpleGraph<>(String.class);
+
+    @Override
+    public void addVertex(int v) {
+        graph.addVertex(v);
+    }
+
+    @Override
+    public void addEdge(String name, int sourceVertex, int destinationVertex) {
+        graph.addEdge(sourceVertex, destinationVertex, name);
+    }
+
+    @Override
+    public Collection<Integer> getNeighbors(int v) {
+        return graph.edgesOf(v).stream()
+                .flatMap(edge -> {
+                    Integer source = graph.getEdgeSource(edge);
+                    Integer target = graph.getEdgeTarget(edge);
+                    return source.equals(v) ? Set.of(target).stream() : Set.of(source).stream();
+                })
+                .collect(Collectors.toSet());
+    }
+}
+
+```
+در نهایت با انجام این تغییرات و اجرای پروژه، همان خروجی مورد انتظار بدست آمد.
+
 # گام سوم
 
 در کل الگوی strategy جایی به کار می‌رود که الگوریتمی داشته باشیم که بخواهیم در زمان رانتایم به صورت دینامیک بتوانیم تغییر دهیم یا انتخاب کنیم.
